@@ -22,6 +22,12 @@ namespace Mordrog
 
         private void InitConfig()
         {
+            PluginConfig.ShouldHealBeforeStartingVoidCell = Config.Bind<bool>(
+                "Settings",
+                "ShouldHealBeforeStartingVoidCell",
+                true,
+                "Should all players be healed on start of cell stabilization"
+            );
         }
     }
 }
