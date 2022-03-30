@@ -39,12 +39,12 @@ namespace Mordrog
 
         private Interactability PurchaseInteraction_GetInteractability(On.RoR2.PurchaseInteraction.orig_GetInteractability orig, PurchaseInteraction self, Interactor activator)
         {
-            if (!CheckIfIsNullWard(self))
+            if (!CheckIfIsNullSafeZone(self))
             {
                 return orig(self, activator);
             }
 
-            if (!WasWardInteractedOnceBeforeUnlock || CheckIfAllAlivePlayersInsideBuffWard(self))
+            if (!WasWardInteractedOnceBeforeUnlock || CheckIfAllAlivePlayersInsideNullSafeZone(self))
             {
                 return orig(self, activator);
             }
@@ -56,13 +56,13 @@ namespace Mordrog
 
         private void PurchaseInteraction_OnInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
         {
-            if (!CheckIfIsNullWard(self))
+            if (!CheckIfIsNullSafeZone(self))
             {
                 orig(self, activator);
                 return;
             }
 
-            if (CheckIfAllAlivePlayersInsideBuffWard(self))
+            if (CheckIfAllAlivePlayersInsideNullSafeZone(self))
             {
                 WasWardInteractedOnceBeforeUnlock = false;
 
@@ -80,21 +80,21 @@ namespace Mordrog
             }
         }
 
-        private bool CheckIfAllAlivePlayersInsideBuffWard(PurchaseInteraction purchaseInteraction)
+        private bool CheckIfAllAlivePlayersInsideNullSafeZone(PurchaseInteraction nullSafeZone)
         {
-            var buffWard = purchaseInteraction.gameObject.GetComponent<BuffWard>();
-            return buffWard && CheckIfAllAlivePlayersInsideBuffWard(buffWard);
+            var sphereZone = nullSafeZone.gameObject.GetComponent<SphereZone>();
+            return sphereZone && CheckIfAllAlivePlayersInsideSphereZone(sphereZone);
         }
 
-        private bool CheckIfAllAlivePlayersInsideBuffWard(BuffWard buffWard)
+        private bool CheckIfAllAlivePlayersInsideSphereZone(SphereZone sphereZone)
         {
             var alivePlayers = GetAllAlivePlayerBodies();
-            return alivePlayers.All(body => CheckIfPlayerInsideBuffWard(body, buffWard));
+            return alivePlayers.All(body => CheckIfPlayerInsideSphereZone(body, sphereZone));
         }
 
-        private bool CheckIfPlayerInsideBuffWard(CharacterBody body, BuffWard buffWard)
+        private bool CheckIfPlayerInsideSphereZone(CharacterBody body, SphereZone sphereZone)
         {
-            return UnityEngine.Vector3.Distance(body.transform.position, buffWard.transform.position) <= buffWard.radius;
+            return UnityEngine.Vector3.Distance(body.transform.position, sphereZone.transform.position) <= sphereZone.radius;
         }
 
         public static IEnumerable<CharacterBody> GetAllAlivePlayerBodies()
@@ -136,7 +136,7 @@ namespace Mordrog
             }
         }
 
-        private bool CheckIfIsNullWard(PurchaseInteraction purchaseInteraction)
+        private bool CheckIfIsNullSafeZone(PurchaseInteraction purchaseInteraction)
         {
             return purchaseInteraction.displayNameToken.Contains("NULL_WARD");
         }
