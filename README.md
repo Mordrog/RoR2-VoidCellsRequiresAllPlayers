@@ -11,6 +11,9 @@ RoR2 mod - prevent players from starting to stabilize void cell before all playe
 Find my other mods here: https://thunderstore.io/package/Mordrog/
 
 ### Changelog
+#### 1.1.2
+- Fix for Survivors of the Void changes
+
 #### 1.1.1
 - Fix for Anniversary Update changes
 
