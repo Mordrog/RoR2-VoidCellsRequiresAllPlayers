@@ -1,6 +1,6 @@
 {
     "name": "VoidCellsRequiresAllPlayers",
-    "version_number": "1.1.2",
+    "version_number": "1.1.3",
     "website_url": "https://github.com/Mordrog/RoR2-VoidCellsRequiresAllPlayers",
     "description": "The mod should prevent players from starting to stabilize void cell before all players are in safe zone.",
     "dependencies": [
