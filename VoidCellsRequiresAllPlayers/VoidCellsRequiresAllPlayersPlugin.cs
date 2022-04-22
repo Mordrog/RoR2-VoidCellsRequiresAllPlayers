@@ -1,8 +1,10 @@
 ﻿using BepInEx;
+using R2API.Utils;
 
 namespace Mordrog
 {
     [BepInDependency("com.bepis.r2api")]
+    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [BepInPlugin(ModGuid, ModName, ModVer)]
     public class VoidCellsRequiresAllPlayersPlugin : BaseUnityPlugin
     {
