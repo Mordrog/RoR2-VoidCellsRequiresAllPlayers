@@ -32,7 +32,7 @@ namespace VoidCellsRequiresAllPlayers
         {
             orig(self, sceneName);
 
-            if (sceneName == "arena" && PluginConfig.ShouldHealBeforeStartingVoidCell.Value)
+            if (sceneName == "arena" && PluginConfig.ShouldHealOnStartingVoidCell.Value)
             {
                 startMessageTimer.StartTimer(3);
             }
@@ -40,7 +40,7 @@ namespace VoidCellsRequiresAllPlayers
 
         private Interactability PurchaseInteraction_GetInteractability(On.RoR2.PurchaseInteraction.orig_GetInteractability orig, PurchaseInteraction self, Interactor activator)
         {
-            if (!CheckIfIsNullSafeZone(self))
+            if (!CheckIfIsNullSafeZone(self) && !CheckIfIsDeepVoidBaterry(self))
             {
                 return orig(self, activator);
             }
@@ -57,7 +57,10 @@ namespace VoidCellsRequiresAllPlayers
 
         private void PurchaseInteraction_OnInteractionBegin(On.RoR2.PurchaseInteraction.orig_OnInteractionBegin orig, PurchaseInteraction self, Interactor activator)
         {
-            if (!CheckIfIsNullSafeZone(self))
+            bool isNullSafeZone = CheckIfIsNullSafeZone(self);
+            bool isDeepVoidBattery = CheckIfIsDeepVoidBaterry(self);
+
+            if (!isNullSafeZone && !isDeepVoidBattery)
             {
                 orig(self, activator);
                 return;
@@ -67,7 +70,8 @@ namespace VoidCellsRequiresAllPlayers
             {
                 WasWardInteractedOnceBeforeUnlock = false;
 
-                if (PluginConfig.ShouldHealBeforeStartingVoidCell.Value)
+                if ((PluginConfig.ShouldHealOnStartingVoidCell.Value && isNullSafeZone) || 
+                    (PluginConfig.ShouldHealOnStartingVoidBattery.Value && isDeepVoidBattery))
                 {
                     HealAllPlayers();
                 }
@@ -84,18 +88,29 @@ namespace VoidCellsRequiresAllPlayers
         private bool CheckIfAllAlivePlayersInsideNullSafeZone(PurchaseInteraction nullSafeZone)
         {
             var sphereZone = nullSafeZone.gameObject.GetComponent<SphereZone>();
-            return sphereZone && CheckIfAllAlivePlayersInsideSphereZone(sphereZone);
+            if (sphereZone)
+            {
+                return sphereZone && CheckIfAllAlivePlayersInsideSphere(sphereZone.transform.position, sphereZone.radius);
+            }
+
+            var holdoutZone = nullSafeZone.gameObject.GetComponent<HoldoutZoneController>();
+            if (holdoutZone)
+            {
+                return holdoutZone && CheckIfAllAlivePlayersInsideSphere(holdoutZone.transform.position, holdoutZone.baseRadius);
+            }
+
+            return false;
         }
 
-        private bool CheckIfAllAlivePlayersInsideSphereZone(SphereZone sphereZone)
+        private bool CheckIfAllAlivePlayersInsideSphere(UnityEngine.Vector3 spherePosition, float sphereRadius)
         {
             var alivePlayers = GetAllAlivePlayerBodies();
-            return alivePlayers.All(body => CheckIfPlayerInsideSphereZone(body, sphereZone));
+            return alivePlayers.All(body => CheckIfPlayerInsideSphere(body, spherePosition, sphereRadius));
         }
 
-        private bool CheckIfPlayerInsideSphereZone(CharacterBody body, SphereZone sphereZone)
+        private bool CheckIfPlayerInsideSphere(CharacterBody body, UnityEngine.Vector3 spherePosition, float sphereRadius)
         {
-            return UnityEngine.Vector3.Distance(body.transform.position, sphereZone.transform.position) <= sphereZone.radius;
+            return UnityEngine.Vector3.Distance(body.transform.position, spherePosition) <= sphereRadius;
         }
 
         public static IEnumerable<CharacterBody> GetAllAlivePlayerBodies()
@@ -139,7 +154,12 @@ namespace VoidCellsRequiresAllPlayers
 
         private bool CheckIfIsNullSafeZone(PurchaseInteraction purchaseInteraction)
         {
-            return purchaseInteraction.displayNameToken.Contains("NULL_WARD");
+            return PluginConfig.ShouldWorkOnVoidCell.Value && purchaseInteraction.displayNameToken.Contains("NULL_WARD");
+        }
+
+        private bool CheckIfIsDeepVoidBaterry(PurchaseInteraction purchaseInteraction)
+        {
+            return PluginConfig.ShouldWorkOnVoidBattery.Value && purchaseInteraction.displayNameToken.Contains("DEEPVOIDBATTERY_NAME");
         }
     }
 }

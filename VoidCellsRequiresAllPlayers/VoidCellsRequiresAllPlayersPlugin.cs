@@ -24,11 +24,32 @@ namespace VoidCellsRequiresAllPlayers
 
         private void InitConfig()
         {
-            PluginConfig.ShouldHealBeforeStartingVoidCell = Config.Bind<bool>(
+            PluginConfig.ShouldWorkOnVoidCell = Config.Bind<bool>(
+                "Settings",
+                "ShouldWorkOnVoidCell",
+                true,
+                "Should mod work on void cells"
+            );
+
+            PluginConfig.ShouldHealOnStartingVoidCell = Config.Bind<bool>(
                 "Settings",
                 "ShouldHealBeforeStartingVoidCell",
                 true,
                 "Should all players be healed on start of cell stabilization"
+            );
+
+            PluginConfig.ShouldWorkOnVoidBattery = Config.Bind<bool>(
+                "Settings",
+                "ShouldWorkOnVoidBattery",
+                true,
+                "Should mod work on void batteries"
+            );
+
+            PluginConfig.ShouldHealOnStartingVoidBattery = Config.Bind<bool>(
+                "Settings",
+                "ShouldHealOnStartingVoidBattery",
+                false,
+                "Should all players be healed on start of deep void signal charge"
             );
         }
     }
