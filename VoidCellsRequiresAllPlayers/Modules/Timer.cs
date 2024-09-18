@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Networking;
 
-namespace Mordrog
+namespace VoidCellsRequiresAllPlayers
 {
     class Timer : NetworkBehaviour
     {

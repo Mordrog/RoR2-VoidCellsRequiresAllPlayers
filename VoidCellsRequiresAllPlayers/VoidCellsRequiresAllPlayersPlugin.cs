@@ -1,7 +1,7 @@
 ﻿using BepInEx;
 using R2API.Utils;
 
-namespace Mordrog
+namespace VoidCellsRequiresAllPlayers
 {
     [BepInDependency("com.bepis.r2api")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]

@@ -1,11 +1,9 @@
 ﻿using BepInEx.Configuration;
-using System.Collections.Generic;
 
-namespace Mordrog
+namespace VoidCellsRequiresAllPlayers
 {
     class PluginConfig
     {
         public static ConfigEntry<bool>
-            ShouldHealBeforeStartingVoidCell;
     }
 }

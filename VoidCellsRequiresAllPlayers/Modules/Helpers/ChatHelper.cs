@@ -1,4 +1,4 @@
-﻿namespace Mordrog
+﻿namespace VoidCellsRequiresAllPlayers
 {
     public static class ChatHelper
     {
