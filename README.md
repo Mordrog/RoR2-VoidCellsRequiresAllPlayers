@@ -14,6 +14,9 @@ RoR2 mod - prevent players from starting to stabilize void cell before all playe
 Find my other mods here: https://thunderstore.io/package/Mordrog/
 
 ### Changelog
+#### 1.3.0
+- Fix for Alloyed Collective changes
+
 #### 1.2.0
 - Fix for Seekers of the Storm changes
 - Added option to require all players for void batteries

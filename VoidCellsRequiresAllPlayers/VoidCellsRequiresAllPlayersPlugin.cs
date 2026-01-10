@@ -11,7 +11,7 @@ namespace VoidCellsRequiresAllPlayers
     [BepInPlugin(ModGuid, ModName, ModVer)]
     public class VoidCellsRequiresAllPlayersPlugin : BaseUnityPlugin
     {
-        public const string ModVer = "1.1.3";
+        public const string ModVer = "1.3.0";
         public const string ModName = "VoidCellsRequiresAllPlayers";
         public const string ModGuid = "com.Mordrog.VoidCellsRequiresAllPlayers";
 
